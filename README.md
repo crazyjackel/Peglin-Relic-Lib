@@ -37,6 +37,16 @@ GUIDs are guarenteed to get the same value after registration.
 You can now make patches wherein you check whether the relicEffect is active according to the RelicManager. You are responsible for getting your own Relic Manager Instances.
 ```
 if (relicManager.RelicEffectActive(effect){
-//Do Something
+    //Do Something
 }
+```
+
+To Add Localization for your Relics, use the built-in LocalizationRegister.
+Your Model will include Name and Description Terms, just fill in the blanks and the rest will be taken care of.
+```
+LocalizationRegister.ImportTerm(new TermDataModel(model.NameTerm)
+{
+    English = "Critical Knife",
+    French = "Dague Pointue"
+});
 ```

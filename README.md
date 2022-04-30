@@ -1,2 +1,4 @@
-# Peglin-RelicLib
-An Event Library for Ease with Creating Relics
+# Peglin-Lib
+A Library for Simple Peglin Tasks
+
+- Includes RelicManager

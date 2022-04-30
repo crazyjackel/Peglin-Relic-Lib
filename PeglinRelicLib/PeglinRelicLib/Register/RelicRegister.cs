@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using I2.Loc;
 using PeglinRelicLib.Model;
 using Relics;
 using System;
@@ -60,7 +61,6 @@ namespace PeglinRelicLib.Register
                 rarity = relicData.Rarity,
                 relic = relic
             });
-            LoadTranslationData(relicData);
 
             relic.effect = (RelicEffect)m_pointer--;
             m_customRelics.Add(relic.effect, relic);
@@ -89,11 +89,6 @@ namespace PeglinRelicLib.Register
 
             if(data.SpriteName != null) relic.sprite = bundle.LoadAsset<Sprite>(data.SpriteName) ?? AssetBundle.LoadFromFile(Path.Combine(Plugin.s_Path, DefaultBundleName)).LoadAsset<Sprite>(DefaultSpriteName);
             if(data.AudioName != null) relic.useSfx = bundle.LoadAsset<AudioClip>(data.AudioName);
-        }
-
-        private void LoadTranslationData(RelicDataModel data)
-        {
-
         }
 
         private void AddRelicToPool(RelicPoolData data, bool noOverflow = false)

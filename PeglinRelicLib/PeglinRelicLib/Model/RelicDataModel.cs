@@ -11,6 +11,26 @@ namespace PeglinRelicLib.Model
 {
     public class RelicDataModel
     {
+
+        public string GUID { get; set; }
+        public string AssemblyPath { get; set; }
+        public string BundlePath { get; set; }
+        public string SpriteName { get; set; }
+        public string AudioName { get; set; }
+        public RelicRarity Rarity { get; set; }
+        public bool AddToPool { get; set; } = true;
+        public string LocalKey { get; set; }
+        public string DescriptionKey { get; set; }
+
+
+        public string FullPath => Path.Combine(AssemblyPath, BundlePath);
+        public string NameTerm => "Relics/" + LocalKey + "_name";
+        public string DescriptionTerm => "Relics/" + LocalKey + "_desc" + DescriptionKey;
+
+        public RelicDataModel(string GUID)
+        {
+            this.GUID = GUID;
+        }
         /// <summary>
         /// Function to Assist in Setting Assembly Path
         /// </summary>
@@ -21,17 +41,5 @@ namespace PeglinRelicLib.Model
             var uri = new UriBuilder(assembly.CodeBase);
             AssemblyPath = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
         }
-        public string GUID { get; set; }
-        public string AssemblyPath { get; set; }
-        public string BundlePath { get; set; }
-        public string SpriteName { get; set; }
-        public string AudioName { get; set; }
-        public string FullPath => Path.Combine(AssemblyPath, BundlePath);
-
-        public RelicRarity Rarity { get; set; }
-        public bool AddToPool { get; set; } = true;
-
-        public string LocalKey { get; set; }
-        public string DescriptionKey { get; set; }
     }
 }

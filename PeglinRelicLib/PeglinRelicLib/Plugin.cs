@@ -19,8 +19,8 @@ namespace PeglinRelicLib
     public class Plugin : BaseUnityPlugin
     {
         public const string GUID = "io.github.crazyjackel.RelicLib";
-        public const string Name = "crazyjackel";
-        public const string Version = "1.0.0";
+        public const string Name = "Relic Lib";
+        public const string Version = "1.0.1";
 
         static string m_path;
         static Plugin m_plugin;
@@ -48,18 +48,29 @@ namespace PeglinRelicLib
 
             if (enableTestItem.Value)
             {
-                RelicEffect effect = RelicRegister.Instance.RegisterRelic(new RelicDataModel()
+                RelicDataModel model = new RelicDataModel("io.github.crazyjackel.criticalknife")
                 {
                     Rarity = RelicRarity.COMMON,
                     AssemblyPath = m_path,
                     BundlePath = "relic",
                     SpriteName = "knife",
                     LocalKey = "knifeCrit",
-                    GUID = "io.github.crazyjackel.criticalknife",
+                    DescriptionKey = "1"
+                };
+
+                RelicRegister.Instance.RegisterRelic(model);
+
+                LocalizationRegister.ImportTerm(new TermDataModel(model.NameTerm)
+                {
+                    English = "Critical Knife",
+                    French = "Dague Pointue"
                 });
 
-                //The Effect is randomly Assigned, However GUID can be used to access effect after it has been registered.
-                RelicEffect effect2 = RelicRegister.Instance["io.github.crazyjackel.criticalknife"];
+                LocalizationRegister.ImportTerm(new TermDataModel(model.DescriptionTerm)
+                {
+                    English = "All attacks get <style=dmg_bonus>+0 /+2</style>.",
+                    French = "Toutes les attaques gagnent <style=dmg_bonus>+0 /+2</style>."
+                });
             }
         }
     }

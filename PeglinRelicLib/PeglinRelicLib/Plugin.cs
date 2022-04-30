@@ -10,6 +10,8 @@ using UnityEngine;
 using Relics;
 using I2.Loc;
 using PeglinRelicLib.Model;
+using PeglinRelicLib.Register;
+using BepInEx.Configuration;
 
 namespace PeglinRelicLib
 {
@@ -21,11 +23,12 @@ namespace PeglinRelicLib
         public const string Version = "1.0.0";
 
         static string m_path;
-        static int m_rg = Enum.GetValues(typeof(RelicEffect)).Cast<int>().Max();
-        static Plugin m_lib;
-        static RelicManager m_relicManager;
-        public static Plugin RelicLib => m_lib;
-        public static string BasePath => m_path;
+        static Plugin m_plugin;
+        public static Plugin s_Plugin => m_plugin;
+        public static string s_Path => m_path;
+
+        internal static ConfigEntry<bool> enableTestItem;
+
         static Plugin()
         {
             //Calculate out a BasePath
@@ -35,30 +38,29 @@ namespace PeglinRelicLib
         }
         void Awake()
         {
-            if (m_lib != null) Destroy(this);
+            if (m_plugin != null) Destroy(this);
+            m_plugin = this;
 
-            m_lib = this;
-            m_relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().First();
+            enableTestItem = Config.Bind("EnableTestItem", "Have Test Item for Relic Lib", false);
 
-            if (m_relicManager == null)
-            {
-                Debug.Log("Relic Manager Not Found");
-                return;
-            }
-
-
-            Harmony patcher =  new Harmony(GUID);
+            Harmony patcher = new Harmony(GUID);
             patcher.PatchAll();
-        }
 
+            if (enableTestItem.Value)
+            {
+                RelicEffect effect = RelicRegister.Instance.RegisterRelic(new RelicDataModel()
+                {
+                    Rarity = RelicRarity.COMMON,
+                    AssemblyPath = m_path,
+                    BundlePath = "relic",
+                    SpriteName = "knife",
+                    LocalKey = "knifeCrit",
+                    GUID = "io.github.crazyjackel.criticalknife",
+                });
 
-        public RelicEffect RegisterRelic(RelicDataModel relicData)
-        {
-            Relic r = ScriptableObject.CreateInstance<Relic>();
-            r.locKey = relicData.LocalKey;
-            r.descMod = relicData.DescriptionKey;
-
-            return (RelicEffect)m_rg++;
+                //The Effect is randomly Assigned, However GUID can be used to access effect after it has been registered.
+                RelicEffect effect2 = RelicRegister.Instance["io.github.crazyjackel.criticalknife"];
+            }
         }
     }
 }

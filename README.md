@@ -6,6 +6,7 @@ Create a Regular BepinEx Plugin and add
 [BepinDependency("io.github.crazyjackel.RelicLib")] 
 on top of your function.
 
+### Create the Model
 To Create A Relic, create a Data Model for Relics
 Make sure to call SetAssemblyPath.
 Make sure you set GUID for your Relic.
@@ -22,6 +23,7 @@ RelicDataModel model = new RelicDataModel()
 model.SetAssemblyPath(this);
 ```
 
+### Register the Model
 Once your Model is created, it is time to register it.
 ```
 RelicEffect effect = RelicRegister.Instance.RegisterRelic(model);
@@ -34,6 +36,7 @@ RelicEffect effect = RelicRegister.Instance[GUID];
 ```
 GUIDs are guarenteed to get the same value after registration.
 
+### Patch with the Effect
 You can now make patches wherein you check whether the relicEffect is active according to the RelicManager. You are responsible for getting your own Relic Manager Instances.
 ```
 if (relicManager.RelicEffectActive(effect){
@@ -41,6 +44,7 @@ if (relicManager.RelicEffectActive(effect){
 }
 ```
 
+### Support Localization
 To Add Localization for your Relics, use the built-in LocalizationRegister.
 Your Model will include Name and Description Terms, just fill in the blanks and the rest will be taken care of.
 ```

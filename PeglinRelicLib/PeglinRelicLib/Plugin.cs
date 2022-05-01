@@ -20,7 +20,7 @@ namespace PeglinRelicLib
     {
         public const string GUID = "io.github.crazyjackel.RelicLib";
         public const string Name = "Relic Lib";
-        public const string Version = "1.0.2";
+        public const string Version = "1.0.3";
 
         static string m_path;
         static Plugin m_plugin;
@@ -58,7 +58,7 @@ namespace PeglinRelicLib
                     DescriptionKey = "1"
                 };
 
-                RelicRegister.Instance.RegisterRelic(model);
+                RelicRegister.RegisterRelic(model);
 
                 LocalizationRegister.ImportTerm(new TermDataModel(model.NameTerm)
                 {

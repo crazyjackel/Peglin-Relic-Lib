@@ -15,12 +15,12 @@ namespace PeglinRelicLib.Patch
     {
         public static void Prefix(RelicManager ____relicManager)
         {
-            RelicRegister.Instance.InitializeRelicsIntoPool(____relicManager);
+            RelicRegister.InitializeRelicsIntoPool(____relicManager);
         }
         public static void Postfix(RelicManager ____relicManager)
         {
             if (!Plugin.enableTestItem.Value) return;
-            Relic relic = RelicRegister.Instance.GetCustomRelic(RelicRegister.Instance["io.github.crazyjackel.criticalknife"]);
+            Relic relic = RelicRegister.GetCustomRelic(RelicRegister.GetCustomRelicEffect("io.github.crazyjackel.criticalknife"));
 
             if (relic == null) return;
             ____relicManager.AddRelic(relic);

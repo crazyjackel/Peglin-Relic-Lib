@@ -12,9 +12,8 @@ using UnityEngine;
 
 namespace PeglinRelicLib.Register
 {
-    public class RelicRegister
+    public static class RelicRegister
     {
-        public static RelicRegister Instance { get; } = new RelicRegister();
         public static List<RelicEffect> RegisteredRelicEffects => m_relicEffects.Values.Concat(m_default.Cast<RelicEffect>()).ToList();
 
         public const string DefaultBundleName = "relic";
@@ -26,13 +25,6 @@ namespace PeglinRelicLib.Register
         static Queue<RelicPoolData> m_relicPool = new Queue<RelicPoolData>();
         static Dictionary<RelicEffect, Relic> m_customRelics = new Dictionary<RelicEffect, Relic>();
         static Dictionary<string, RelicEffect> m_relicEffects = new Dictionary<string, RelicEffect>();
-        public RelicEffect this[string GUID]
-        {
-            get
-            {
-                return GetCustomRelicEffect(GUID);
-            }
-        }
 
         public static RelicEffect GetCustomRelicEffect(string GUID)
         {
@@ -54,12 +46,12 @@ namespace PeglinRelicLib.Register
             return RelicEffect.NONE;
         }
 
-        public Relic GetCustomRelic(RelicEffect effect)
+        public static Relic GetCustomRelic(RelicEffect effect)
         {
             return m_customRelics[effect];
         }
 
-        internal void InitializeRelicsIntoPool(RelicManager relicManager)
+        internal static void InitializeRelicsIntoPool(RelicManager relicManager)
         {
             m_relicManager = relicManager;
             while(m_relicPool.Count > 0)
@@ -69,7 +61,7 @@ namespace PeglinRelicLib.Register
             }
         }
 
-        public RelicEffect RegisterRelic(RelicDataModel relicData)
+        public static RelicEffect RegisterRelic(RelicDataModel relicData)
         {
             Relic relic = ScriptableObject.CreateInstance<Relic>();
             relic.locKey = relicData.LocalKey;
@@ -90,14 +82,14 @@ namespace PeglinRelicLib.Register
         }
 
 
-        public void UnregisterRelic(RelicEffect effect)
+        public static void UnregisterRelic(RelicEffect effect)
         {
             //Todo:
             //Remove RelicEffect from RelicPool
         }
 
 
-        private void LoadRelicAssets(Relic relic, RelicDataModel data)
+        private static void LoadRelicAssets(Relic relic, RelicDataModel data)
         {
             if (data.FullPath == null || data.FullPath == "") return;
 
@@ -112,7 +104,7 @@ namespace PeglinRelicLib.Register
             if(data.AudioName != null) relic.useSfx = bundle.LoadAsset<AudioClip>(data.AudioName);
         }
 
-        private void AddRelicToPool(RelicPoolData data, bool noOverflow = false)
+        private static void AddRelicToPool(RelicPoolData data, bool noOverflow = false)
         {
             if(m_relicManager == null && !noOverflow)
             {

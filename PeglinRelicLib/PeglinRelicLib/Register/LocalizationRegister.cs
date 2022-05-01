@@ -9,9 +9,8 @@ using UnityEngine;
 
 namespace PeglinRelicLib.Register
 {
-    public class LocalizationRegister
+    public static class LocalizationRegister
     {
-        public static LocalizationRegister Instance { get; } = new LocalizationRegister();
         
         public static void ImportTerm(params TermDataModel[] models)
         {

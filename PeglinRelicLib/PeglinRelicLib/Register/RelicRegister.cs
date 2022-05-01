@@ -30,8 +30,28 @@ namespace PeglinRelicLib.Register
         {
             get
             {
-                return m_relicEffects[GUID];
+                return GetCustomRelicEffect(GUID);
             }
+        }
+
+        public static RelicEffect GetCustomRelicEffect(string GUID)
+        {
+            if (m_relicEffects.TryGetValue(GUID, out RelicEffect value))
+            {
+                return value;
+            }
+            else
+            {
+                try
+                {
+                    return (RelicEffect)Enum.Parse(typeof(RelicEffect), GUID);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            return RelicEffect.NONE;
         }
 
         public Relic GetCustomRelic(RelicEffect effect)
@@ -63,6 +83,7 @@ namespace PeglinRelicLib.Register
             });
 
             relic.effect = (RelicEffect)m_pointer--;
+            Debug.Log($"Registering {relicData.GUID} to {(int)relic.effect}");
             m_customRelics.Add(relic.effect, relic);
             m_relicEffects[relicData.GUID] = relic.effect;
             return relic.effect;

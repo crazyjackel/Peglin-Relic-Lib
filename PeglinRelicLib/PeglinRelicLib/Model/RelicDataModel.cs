@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PeglinRelicLib.Model
 {
@@ -14,6 +15,8 @@ namespace PeglinRelicLib.Model
 
         public string GUID { get; set; }
         public string AssemblyPath { get; set; }
+        public Sprite RelicSprite { get; set; }
+        public AudioClip RelicAudio { get; set; }
         public string BundlePath { get; set; }
         public string SpriteName { get; set; }
         public string AudioName { get; set; }

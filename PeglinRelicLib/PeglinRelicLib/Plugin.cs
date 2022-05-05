@@ -27,7 +27,9 @@ namespace PeglinRelicLib
         public static Plugin s_Plugin => m_plugin;
         public static string s_Path => m_path;
 
-        internal static ConfigEntry<bool> enableTestItem;
+        public static ConfigEntry<bool> enableTestItem;
+        internal static ConfigEntry<bool> debugLog;
+        internal static ConfigEntry<string> reserveInfo;
 
         static Plugin()
         {
@@ -42,9 +44,12 @@ namespace PeglinRelicLib
             m_plugin = this;
 
             enableTestItem = Config.Bind("EnableTestItem", "Have Test Item for Relic Lib", false);
+            debugLog = Config.Bind("Config Output", "Output Information", false);
+            reserveInfo = Config.Bind("Reserve Data", "Do not Touch", "");
 
             Harmony patcher = new Harmony(GUID);
             patcher.PatchAll();
+
 
             if (enableTestItem.Value)
             {

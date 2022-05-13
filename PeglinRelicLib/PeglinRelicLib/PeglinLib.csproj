@@ -81,7 +81,10 @@
     <Compile Include="Register\LocalizationRegister.cs" />
     <Compile Include="Register\RelicRegister.cs" />
     <Compile Include="Test\CriticalKnife.cs" />
+    <Compile Include="Utility\SerializableDictionary.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

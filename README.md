@@ -73,3 +73,21 @@ Saving Data:
 ```
 ModdedDataSerializer.Save("io.github.crazyjackel.eventLifeLost", eventLifeLost);
 ```
+
+### Config Help
+
+Enable Test Item enables a Test Item and gives it to you when you start the game. These Items are used to make sure core systems work in mod.
+
+Debug Log: A Number used to dictate Logging output. Based on a Flag System using LogType for numbers between 0-31.
+We do this by adding the powers of 2 for each option.
+Given the Options are Error = 0, Assert = 1, Warning = 2, Log = 3, and Exceptions = 4, We can calculate out the valid number for getting only Errors, Warnings, and Logs as follows:
+2^Error + 2^Warning + 2^Log = 1 + 4 + 8 = 13
+
+## Roadmap
+
+- Relic Countdowns. (1.0.6)
+- Bug Squashing. (1.0.6) 
+- Relic Tagging for Compatibility w/ Lookup. (1.0.7)
+- Additional Test Items (1.0.7)
+- Localization from CSV File. (1.0.6)
+- Better Code Commenting (1.0.6)

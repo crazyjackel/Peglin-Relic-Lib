@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToolBox.Serialization;
 using UnityEngine;
 
 namespace PeglinRelicLib.Register
@@ -146,10 +147,14 @@ namespace PeglinRelicLib.Register
             }
         }
 
+        internal static void SaveToConfig()
+        {
+            ModdedDataSerializer.Save("io.github.crazyjackel.reservedRelics", m_reservedEffects);
+        }
         internal static void LoadFromConfig()
         {
-            string reserved = Plugin.reserveInfo.Value;
-            if (reserved != "") m_reservedEffects = JsonUtility.FromJson<SerializableDictionary<string, RelicEffect>>(reserved);
+            var reserved = ModdedDataSerializer.Load<SerializableDictionary<string, RelicEffect>>("io.github.crazyjackel.reservedRelics");
+            if (reserved != null) m_reservedEffects = reserved;
 
             foreach (var relic in m_reservedEffects)
             {
@@ -159,15 +164,10 @@ namespace PeglinRelicLib.Register
         internal static void ResetReserveEffects()
         {
             m_reservedEffects.Clear();
-            foreach(var pair in m_registeredEffects)
+            foreach (var pair in m_registeredEffects)
             {
-                m_registeredEffects.Add(pair.Key, pair.Value);
+                m_reservedEffects.Add(pair.Key, pair.Value);
             }
-        }
-        internal static void SaveToConfig()
-        {
-            string reserve = JsonUtility.ToJson(m_reservedEffects);
-            Plugin.reserveInfo.SetSerializedValue(reserve);
         }
         internal static void InitializeRelicsIntoPool(RelicManager relicManager)
         {

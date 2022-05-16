@@ -23,6 +23,7 @@ namespace PeglinRelicLib.Register
                 if (string.IsNullOrEmpty(model.Key)) continue;
                 if (!LocalizationManager.TryGetTranslation(model.Key, out _))
                 {
+                    Plugin.Log(LogType.Log, $"Adding Translation for {model.Key}");
                     builder.Append(model.GetCSVLine());
                     appendcount++;
                 }

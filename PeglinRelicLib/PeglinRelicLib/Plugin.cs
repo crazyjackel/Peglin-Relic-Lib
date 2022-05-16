@@ -12,6 +12,7 @@ using I2.Loc;
 using PeglinRelicLib.Model;
 using PeglinRelicLib.Register;
 using BepInEx.Configuration;
+using PeglinRelicLib.Utility;
 
 namespace PeglinRelicLib
 {
@@ -20,7 +21,7 @@ namespace PeglinRelicLib
     {
         public const string GUID = "io.github.crazyjackel.RelicLib";
         public const string Name = "Relic Lib";
-        public const string Version = "1.0.3";
+        public const string Version = "1.0.5";
 
         static string m_path;
         static Plugin m_plugin;
@@ -45,17 +46,6 @@ namespace PeglinRelicLib
             int selector = debugLog.Value;
             int type_int = 1 << (int)type;
             //Check if DebugLog has flag
-            //Example:
-            // 10101 selector
-            // 00100 type_int
-            // 00100 result
-            // true
-            //
-            // 10101 selector
-            // 00010 type_int
-            // 00000 result
-            // false
-            // If and operator does not change, then we have flag or flag combo.
             if((selector & type_int) == type_int)
             {
                 Debug.unityLogger.Log(type, arg);
@@ -67,16 +57,22 @@ namespace PeglinRelicLib
             if (m_plugin != null) Destroy(this);
             m_plugin = this;
 
+            //Get Config
             enableTestItem = Config.Bind("EnableTestItem", "Have Test Item for Relic Lib", false);
             debugLog = Config.Bind("Config Output", "Flag for Output of Logs, (0 - No Logging, 1 - Only Errors, 4 - Only Warnings, 5 - Errors and Warnings, 31 - All Logs)", 1);
             reserveInfo = Config.Bind("Reserve Data", "Do not Touch", "");
 
+            //Setup Data
+            ModdedDataSerializer.Setup();
+            
+            //Load Data from Config
             RelicRegister.LoadFromConfig();
 
+            //Do Patches
             Harmony patcher = new Harmony(GUID);
             patcher.PatchAll();
 
-
+            //Do Subscription Test Item.
             if (enableTestItem.Value)
             {
                 RelicDataModel model = new RelicDataModel("io.github.crazyjackel.criticalknife")

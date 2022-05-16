@@ -15,6 +15,7 @@ namespace PeglinRelicLib.Patch
     {
         public static void Prefix(RelicManager ____relicManager)
         {
+            //Register Relics
             RelicRegister.InitializeRelicsIntoPool(____relicManager);
         }
         public static void Postfix(RelicManager ____relicManager)

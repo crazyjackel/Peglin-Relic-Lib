@@ -91,3 +91,6 @@ Given the Options are Error = 0, Assert = 1, Warning = 2, Log = 3, and Exception
 - Additional Test Items (1.0.7)
 - Localization from CSV File. (1.0.6)
 - Better Code Commenting (1.0.6)
+
+Links:
+https://github.com/crazyjackel/Peglin-Relic-Lib

@@ -76,6 +76,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IModel.cs" />
+    <Compile Include="Interfaces\IRegister.cs" />
     <Compile Include="Model\RelicDataModel.cs" />
     <Compile Include="Model\TermDataModel.cs" />
     <Compile Include="Patch\ModdedDataSerializerPatch.cs" />
@@ -83,7 +85,8 @@
     <Compile Include="Patch\SaveRelicEffectsPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Register\LocalizationRegister.cs" />
+    <Compile Include="Utility\LocalizationHelper.cs" />
+    <Compile Include="Register\Register.cs" />
     <Compile Include="Register\RelicRegister.cs" />
     <Compile Include="Test\CriticalKnife.cs" />
     <Compile Include="Utility\ModdedDataSerializer.cs" />

@@ -21,7 +21,7 @@ namespace PeglinRelicLib
     {
         public const string GUID = "io.github.crazyjackel.RelicLib";
         public const string Name = "Relic Lib";
-        public const string Version = "1.0.5";
+        public const string Version = "2.0.0";
 
         static string m_path;
         static Plugin m_plugin;
@@ -66,7 +66,7 @@ namespace PeglinRelicLib
             ModdedDataSerializer.Setup();
             
             //Load Data from Config
-            RelicRegister.LoadFromConfig();
+            RelicRegister.LoadConfig();
 
             //Do Patches
             Harmony patcher = new Harmony(GUID);
@@ -87,15 +87,15 @@ namespace PeglinRelicLib
                     DescriptionKey = "1"
                 };
 
-                RelicRegister.RegisterRelic(model);
+                RelicRegister.RegisterRelic(model, out _);
 
-                LocalizationRegister.ImportTerm(new TermDataModel(model.NameTerm)
+                LocalizationHelper.ImportTerm(new TermDataModel(model.NameTerm)
                 {
                     English = "Critical Knife",
                     French = "Dague Pointue"
                 });
 
-                LocalizationRegister.ImportTerm(new TermDataModel(model.DescriptionTerm)
+                LocalizationHelper.ImportTerm(new TermDataModel(model.DescriptionTerm)
                 {
                     English = "All attacks get <style=dmg_bonus>+0 /+2</style>.",
                     French = "Toutes les attaques gagnent <style=dmg_bonus>+0 /+2</style>."

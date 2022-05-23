@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using I2.Loc;
+using PeglinRelicLib.Interfaces;
 using PeglinRelicLib.Model;
 using PeglinRelicLib.Utility;
 using Relics;
@@ -14,6 +15,228 @@ using UnityEngine;
 
 namespace PeglinRelicLib.Register
 {
+    public class RelicRegister : Register<RelicRegister, RelicEffect>
+    {
+        public override string SaveID => "io.github.crazyjackel.relicRegister";
+
+        public const string DefaultBundleName = "relic";
+        public const string DefaultSpriteName = "knife";
+
+        /// <summary>
+        /// Default Bundle Location for Loading Default Assets
+        /// </summary>
+        readonly AssetBundle m_defaultBundle;
+        /// <summary>
+        /// Default Sprite for Relics without a set Sprite
+        /// </summary>
+        readonly Sprite m_defaultSprite;
+        /// <summary>
+        /// Queue For Data being added into the Pools
+        /// </summary>
+        readonly Queue<RelicPoolData> m_relicPool;
+        /// <summary>
+        /// Relic Manager Instance, We only Access it once the Game Starts. Use to Add Relics into Pools
+        /// </summary>
+        RelicManager m_relicManager;
+        /// <summary>
+        /// A Dictionary for Accessing Relics from their Effect
+        /// </summary>
+        readonly Dictionary<RelicEffect, Relic> m_customRelics;
+
+        public int m_pointer;
+
+        public RelicRegister()
+        {
+            m_defaultBundle = AssetBundle.LoadFromFile(Path.Combine(Plugin.s_Path, DefaultBundleName));
+            m_relicPool = new Queue<RelicPoolData>();
+            m_defaultSprite = m_defaultBundle.LoadAsset<Sprite>(DefaultSpriteName);
+            m_pointer = m_default.Min(x => (int)x) - 1; 
+            m_customRelics = new Dictionary<RelicEffect, Relic>();
+        }
+
+        #region Front End
+        public static RelicEffect GetCustomRelicEffect(string GUID)
+        {
+            if (Instance.TryGetRegisteredValue(GUID, out RelicEffect @enum))
+            {
+                return @enum;
+            }
+            return default;
+        }
+        public static Relic GetCustomRelic(string GUID)
+        {
+            return GetCustomRelic(GetCustomRelicEffect(GUID));
+        }
+        public static Relic GetCustomRelic(RelicEffect effect)
+        {
+            return Instance.m_customRelics[effect];
+        }
+        [Obsolete("Use Alternative Register Relic")]
+        public static RelicEffect RegisterRelic(RelicDataModel relicData)
+        {
+            if (Instance.RegisterValue(relicData, out RelicEffect effect))
+            {
+                return effect;
+            }
+            return default;
+        }
+        public static bool RegisterRelic(RelicDataModel relicData, out RelicEffect @enum)
+        {
+            if (Instance.RegisterValue(relicData, out RelicEffect effect))
+            {
+                @enum = effect;
+                Plugin.Log(LogType.Log, $"Registering {relicData.GUID} to {(int)@enum}");
+                return true;
+            }
+            @enum = default;
+            return false;
+        }
+        internal static void SaveConfig()
+        {
+            Instance.Save();
+        }
+        internal static void LoadConfig()
+        {
+            Instance.Load();
+        }
+        internal static void ResetConfig()
+        {
+            Instance.Reset();
+        }
+        internal static void InitializeRelicsIntoPool(RelicManager relicManager)
+        {
+            Instance.m_relicManager = relicManager;
+            while (Instance.m_relicPool.Count > 0)
+            {
+                RelicPoolData data = Instance.m_relicPool.Dequeue();
+                Instance.AddRelicToPool(data, true);
+            }
+        }
+        #endregion
+
+        protected override RelicEffect CalculateEnum(string GUID)
+        {
+            if (m_reserved.ContainsKey(GUID))
+            {
+                return m_reserved[GUID];
+            }
+
+            if (m_registered.ContainsKey(GUID))
+            {
+                return m_registered[GUID];
+            }
+
+            //Find an Open Spot
+            while (m_values.Contains((RelicEffect)m_pointer))
+            {
+                m_pointer--;
+            }
+            return (RelicEffect)m_pointer;
+        }
+
+        protected override bool LoadModel(IModel<RelicEffect> model, out object args)
+        {
+            if (model is RelicDataModel relicData)
+            {
+                Relic relic = ScriptableObject.CreateInstance<Relic>();
+                relic.locKey = relicData.LocalKey;
+                relic.descMod = relicData.DescriptionKey;
+
+                LoadRelicAssets(relic, relicData);
+                AddRelicToPool(new RelicPoolData()
+                {
+                    Rarity = relicData.Rarity,
+                    Relic = relic,
+                    AddToPool = relicData.AddToPool
+                });
+                args = relic;
+                return true;
+            }
+            args = default;
+            return false;
+        }
+        private void LoadRelicAssets(Relic relic, RelicDataModel data)
+        {
+            relic.sprite = data.RelicSprite ?? m_defaultSprite;
+            relic.useSfx = data.RelicAudio;
+
+            if (data.AssemblyPath == null || data.FullPath == null || data.BundlePath == null) return;
+
+            AssetBundle bundle = AssetBundle.LoadFromFile(data.FullPath);
+            if (bundle == null)
+            {
+                Plugin.Log(LogType.Error, $"Bundle at ({data.FullPath}) was Not Found");
+                return;
+            }
+
+            if (data.SpriteName != null)
+            {
+                Sprite spr = bundle.LoadAsset<Sprite>(data.SpriteName);
+                if (spr != null) relic.sprite = spr;
+            }
+            if (data.AudioName != null)
+            {
+                AudioClip clip = bundle.LoadAsset<AudioClip>(data.AudioName);
+                if (clip != null) relic.useSfx = clip;
+            }
+            bundle.Unload(false);
+        }
+
+        private void AddRelicToPool(RelicPoolData data, bool noOverflow = false)
+        {
+            if (m_relicManager == null && !noOverflow)
+            {
+                m_relicPool.Enqueue(data);
+                return;
+            }
+
+            RelicSet set = (RelicSet)AccessTools.Field(typeof(RelicManager), "_rareScenarioRelics").GetValue(m_relicManager);
+            if (data.AddToPool)
+            {
+                switch (data.Rarity)
+                {
+                    case RelicRarity.COMMON:
+                        set = (RelicSet)AccessTools.Field(typeof(RelicManager), "_commonRelicPool").GetValue(m_relicManager);
+                        break;
+                    case RelicRarity.RARE:
+                        set = (RelicSet)AccessTools.Field(typeof(RelicManager), "_rareRelicPool").GetValue(m_relicManager);
+                        break;
+                    case RelicRarity.BOSS:
+                        set = (RelicSet)AccessTools.Field(typeof(RelicManager), "_bossRelicPool").GetValue(m_relicManager);
+                        break;
+                    case RelicRarity.NONE:
+                    default:
+                        break;
+                }
+            }
+
+            List<Relic> relics = (List<Relic>)AccessTools.Field(typeof(RelicSet), "_relics").GetValue(set);
+            relics.Add(data.Relic);
+        }
+        protected override void FinalizeModel(IModel<RelicEffect> model, RelicEffect @enum, object args)
+        {
+            if(args is Relic relic)
+            {
+                m_customRelics.Add(@enum, relic);
+            }
+        }
+        protected override void UnloadEnum(RelicEffect @enum)
+        {
+            while (m_relicManager?.RelicEffectActive(@enum) ?? false)
+            {
+                m_relicManager?.RemoveRelic(@enum);
+            }
+            m_customRelics.Remove(@enum);
+        }
+
+        private class RelicPoolData
+        {
+            public RelicRarity Rarity { get; set; }
+            public Relic Relic { get; set; }
+            public bool AddToPool { get; set; }
+        }
+    }
+    /*
     public static class RelicRegister
     {
         #region Properties
@@ -244,5 +467,5 @@ namespace PeglinRelicLib.Register
             public Relic Relic { get; set; }
             public bool AddToPool { get; set; }
         }
-    }
+    }*/
 }

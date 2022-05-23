@@ -16,7 +16,7 @@ namespace PeglinRelicLib.Patch
         public static void Prefix()
         {
             //We Save Our Config Whenever the Game Saves our Relic Data
-            RelicRegister.SaveToConfig();
+            RelicRegister.SaveConfig();
         }
     }
 
@@ -29,10 +29,10 @@ namespace PeglinRelicLib.Patch
             {
                 //If it is a New Game Clear out our buffer.
                 //This means we will only expect additional relics needing to be reserved
-                RelicRegister.ResetReserveEffects();
+                RelicRegister.ResetConfig();
             }
             //We Save our Config whenever a New Game Begins
-            RelicRegister.SaveToConfig();
+            RelicRegister.SaveConfig();
         }
     }
 }

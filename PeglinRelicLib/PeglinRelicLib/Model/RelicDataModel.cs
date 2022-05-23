@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using PeglinRelicLib.Interfaces;
 using Relics;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,8 @@ using UnityEngine;
 
 namespace PeglinRelicLib.Model
 {
-    public class RelicDataModel
+    public class RelicDataModel : IModel<RelicEffect>
     {
-
         public string GUID { get; set; }
         public string AssemblyPath { get; set; }
         public Sprite RelicSprite { get; set; }
@@ -38,11 +38,12 @@ namespace PeglinRelicLib.Model
         /// Function to Assist in Setting Assembly Path
         /// </summary>
         /// <param name="plugin"></param>
-        public void SetAssemblyPath(BaseUnityPlugin plugin)
+        public RelicDataModel SetAssemblyPath(BaseUnityPlugin plugin)
         {
             var assembly = plugin.GetType().Assembly;
             var uri = new UriBuilder(assembly.CodeBase);
             AssemblyPath = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
+            return this;
         }
     }
 }

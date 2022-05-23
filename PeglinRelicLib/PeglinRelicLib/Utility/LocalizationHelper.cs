@@ -7,11 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace PeglinRelicLib.Register
+namespace PeglinRelicLib.Utility
 {
-    public static class LocalizationRegister
+    public static class LocalizationHelper
     {
-        
         public static void ImportTerm(params TermDataModel[] models)
         {
             StringBuilder builder = new StringBuilder();

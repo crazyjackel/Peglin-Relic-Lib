@@ -14,11 +14,6 @@ namespace PeglinRelicLib.Patch
     [HarmonyPatch(typeof(GameInit), "Start")]
     public class RelicManagerInstancePatch
     {
-        public static void Prefix(RelicManager ____relicManager)
-        {
-            //Register Relics
-            RelicRegister.InitializeRelicsIntoPool(____relicManager);
-        }
         public static void Postfix(RelicManager ____relicManager)
         {
             if (!Plugin.enableTestItem.Value) return;
@@ -28,6 +23,16 @@ namespace PeglinRelicLib.Patch
             if (relic == null) return;
 
             ____relicManager.AddRelic(relic);
+        }
+    }
+    [HarmonyPriority(Priority.First)]
+    [HarmonyPatch(typeof(RelicManager), "Reset")]
+    public class RelicManagerResetPatch
+    {
+        public static void Prefix(RelicManager __instance)
+        {
+            //Register Relics
+            RelicRegister.InitializeRelicsIntoPool(__instance);
         }
     }
 }

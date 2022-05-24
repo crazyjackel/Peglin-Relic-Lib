@@ -65,6 +65,11 @@ namespace PeglinRelicLib.Register
             effect = default;
             return false;
         }
+        [Obsolete("Use TryGetCustomRelicEffect Instead")]
+        public static RelicEffect GetCustomRelicEffect(string GUID)
+        {
+            return Instance.m_registered[GUID];
+        }
         public static bool TryGetCustomRelic(string GUID, out Relic relic)
         {
             relic = null;
@@ -101,7 +106,7 @@ namespace PeglinRelicLib.Register
             if (Instance.RegisterValue(relicData, out RelicEffect effect))
             {
                 @enum = effect;
-                Plugin.Log(LogType.Log, $"Registering {relicData.GUID} to {(int)@enum}");
+                Plugin.Log(BepInEx.Logging.LogLevel.Info, $"Registering {relicData.GUID} to {(int)@enum}");
                 return true;
             }
             @enum = default;
@@ -181,7 +186,7 @@ namespace PeglinRelicLib.Register
             AssetBundle bundle = AssetBundle.LoadFromFile(data.FullPath);
             if (bundle == null)
             {
-                Plugin.Log(LogType.Error, $"Bundle at ({data.FullPath}) was Not Found");
+                Plugin.Log(BepInEx.Logging.LogLevel.Error, $"Bundle at ({data.FullPath}) was Not Found");
                 return;
             }
 
@@ -233,6 +238,7 @@ namespace PeglinRelicLib.Register
         {
             if(args is Relic relic)
             {
+                relic.effect = @enum;
                 m_customRelics.Add(@enum, relic);
             }
         }

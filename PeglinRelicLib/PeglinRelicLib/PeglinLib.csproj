@@ -83,7 +83,7 @@
     <Compile Include="Model\TermDataModel.cs" />
     <Compile Include="Patch\ModdedDataSerializerPatch.cs" />
     <Compile Include="Patch\PegTypePatches.cs" />
-    <Compile Include="Patch\RelicManagerInstancePatch.cs" />
+    <Compile Include="Patch\RelicManagerPatches.cs" />
     <Compile Include="Patch\SaveRelicEffectsPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,6 @@
-﻿using BepInEx.Bootstrap;
+﻿using Battle;
+using BepInEx.Bootstrap;
+using HarmonyLib;
 using PeglinRelicLib.Interfaces;
 using PeglinRelicLib.Model;
 using System;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using static Peg;
 
 namespace PeglinRelicLib.Register
@@ -18,21 +21,44 @@ namespace PeglinRelicLib.Register
 
         private readonly HashSet<Type> PegTypes;
         public readonly Dictionary<Type, HashSet<PegType>> SupportedPairs;
-        public readonly Dictionary<PegType, Dictionary<Type, object>> Actions;
+        public readonly Dictionary<PegType, Dictionary<Type, object>> ConvertToPegActions;
+        public readonly Dictionary<PegType, Func<PegManager, int>> GetPegCountActions;
+        public readonly Dictionary<PegType, List<Peg>> PegsOfTypes;
         public PegTypeRegister()
         {
             PegTypes = new HashSet<Type>(FindPegTypesFromAssembly());
             SupportedPairs = new Dictionary<Type, HashSet<PegType>>();
-            Actions = new Dictionary<PegType, Dictionary<Type, object>>();
+            ConvertToPegActions = new Dictionary<PegType, Dictionary<Type, object>>();
+            GetPegCountActions = new Dictionary<PegType, Func<PegManager, int>>();
+            PegsOfTypes = new Dictionary<PegType, List<Peg>>();
             foreach (Type type in PegTypes)
             {
                 SupportedPairs.Add(type, new HashSet<PegType>());
             }
         }
+
         #region Front End
+        public static void ShufflePegTypes(PegManager pegManager, PegType type)
+        {
+            if (!Instance.PegsOfTypes.ContainsKey(type)) Instance.PegsOfTypes.Add(type, new List<Peg>());
+            AccessTools.Method(typeof(PegManager), "ShufflePegs").Invoke(pegManager, new object[] { Instance.PegsOfTypes[type], type });
+        }
+
+        internal static List<PegType> GetPegTypesHit()
+        {
+            return Instance.GetPegCountActions.Keys.ToList();
+        }
+        internal static int GetPegHit(PegManager pegManager, PegType type)
+        {
+            if (Instance.GetPegCountActions.TryGetValue(type, out Func<PegManager, int> func))
+            {
+                return func(pegManager);
+            }
+            return 0;
+        }
         internal static void OnConvertToPegType<T>(T peg, PegType type) where T : Peg
         {
-            if (!Instance.Actions.TryGetValue(type, out Dictionary<Type, object> actions)) return;
+            if (!Instance.ConvertToPegActions.TryGetValue(type, out Dictionary<Type, object> actions)) return;
 
             if (actions == null) return;
 
@@ -42,6 +68,10 @@ namespace PeglinRelicLib.Register
             {
                 act.Invoke(peg);
             }
+        }
+        public static bool IsCustomPegType(PegType type)
+        {
+            return Instance.m_registered.Values.Contains(type);
         }
         /// <summary>
         /// Get All Implementations Types of Abstract Peg. 
@@ -115,9 +145,13 @@ namespace PeglinRelicLib.Register
 
         protected override bool LoadModel(IModel<PegType> model, out object args)
         {
-
+            if (model is PegTypeDataModel datamodel)
+            {
+                args = null;
+                return true;
+            }
             args = null;
-            return true;
+            return false;
         }
         protected override void FinalizeModel(IModel<PegType> model, PegType @enum, object args)
         {
@@ -130,7 +164,8 @@ namespace PeglinRelicLib.Register
                     SupportedPairs[type]?.Add(@enum);
                 }
 
-                Actions.Add(@enum, dataModel.Actions);
+                ConvertToPegActions.Add(@enum, dataModel.PegConversionAction);
+                GetPegCountActions.Add(@enum, dataModel.GetPegCount);
             }
         }
         internal static IEnumerable<Type> FindPegTypesFromAssembly()

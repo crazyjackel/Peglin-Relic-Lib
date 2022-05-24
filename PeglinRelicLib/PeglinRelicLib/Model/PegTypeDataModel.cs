@@ -1,4 +1,5 @@
-﻿using PeglinRelicLib.Interfaces;
+﻿using Battle;
+using PeglinRelicLib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace PeglinRelicLib.Model
         public string GUID { get; set; }
 
         public HashSet<Type> SupportTypes { get; set; } = new HashSet<Type>();
-        public Dictionary<Type, object> Actions { get; set; } = new Dictionary<Type, object>();
-
+        public Dictionary<Type, object> PegConversionAction { get; set; } = new Dictionary<Type, object>();
+        public Func<PegManager, int> GetPegCount { get; set; } = null;
         public PegTypeDataModel(string GUID)
         {
             this.GUID = GUID;
@@ -28,7 +29,13 @@ namespace PeglinRelicLib.Model
         public PegTypeDataModel AddSupport<T>(Action<T> OnConversion) where T : Peg
         {
             SupportTypes.Add(typeof(T));
-            Actions.Add(typeof(T), OnConversion);
+            PegConversionAction.Add(typeof(T), OnConversion);
+            return this;
+        }
+
+        public PegTypeDataModel AddBoardPegCount(Func<PegManager,int> GetPegCount)
+        {
+            this.GetPegCount = GetPegCount;
             return this;
         }
     }

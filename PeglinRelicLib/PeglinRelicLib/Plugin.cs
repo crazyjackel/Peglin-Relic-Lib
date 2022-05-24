@@ -13,6 +13,7 @@ using PeglinRelicLib.Model;
 using PeglinRelicLib.Register;
 using BepInEx.Configuration;
 using PeglinRelicLib.Utility;
+using BepInEx.Logging;
 
 namespace PeglinRelicLib
 {
@@ -29,7 +30,7 @@ namespace PeglinRelicLib
         public static string s_Path => m_path;
 
         public static ConfigEntry<bool> enableTestItem;
-        internal static ConfigEntry<int> debugLog;
+        internal static ConfigEntry<LogLevel> debugLog;
 
         static Plugin()
         {
@@ -39,15 +40,14 @@ namespace PeglinRelicLib
             m_path = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
         }
 
-        public static void Log(LogType type, string arg)
+        public static void Log(LogLevel type, string arg)
         {
             //Get Int from BitShift
-            int selector = debugLog.Value;
-            int type_int = 1 << (int)type;
+            LogLevel selector = debugLog.Value;
             //Check if DebugLog has flag
-            if((selector & type_int) == type_int)
+            if(selector.HasFlag(type))
             {
-                Debug.unityLogger.Log(type, arg);
+                m_plugin.Logger.Log(type, arg);
             }
         }
 
@@ -58,7 +58,7 @@ namespace PeglinRelicLib
 
             //Get Config
             enableTestItem = Config.Bind("EnableTestItem", "Have Test Item for Relic Lib", false);
-            debugLog = Config.Bind("Config Output", "Flag for Output of Logs, (0 - No Logging, 1 - Only Errors, 4 - Only Warnings, 5 - Errors and Warnings, 31 - All Logs)", 1);
+            debugLog = Config.Bind("Config Output", "Flag for Output of Logs", LogLevel.Error | LogLevel.Fatal);
 
             //Setup Data
             ModdedDataSerializer.Setup();

@@ -30,9 +30,11 @@ namespace PeglinRelicLib.Patch
                 //If it is a New Game Clear out our buffer.
                 //This means we will only expect additional relics needing to be reserved
                 RelicRegister.ResetConfig();
+                PegTypeRegister.ResetConfig();
             }
             //We Save our Config whenever a New Game Begins
             RelicRegister.SaveConfig();
+            PegTypeRegister.SaveConfig();
         }
     }
 }

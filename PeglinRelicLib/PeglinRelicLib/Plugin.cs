@@ -30,7 +30,6 @@ namespace PeglinRelicLib
 
         public static ConfigEntry<bool> enableTestItem;
         internal static ConfigEntry<int> debugLog;
-        internal static ConfigEntry<string> reserveInfo;
 
         static Plugin()
         {
@@ -60,13 +59,13 @@ namespace PeglinRelicLib
             //Get Config
             enableTestItem = Config.Bind("EnableTestItem", "Have Test Item for Relic Lib", false);
             debugLog = Config.Bind("Config Output", "Flag for Output of Logs, (0 - No Logging, 1 - Only Errors, 4 - Only Warnings, 5 - Errors and Warnings, 31 - All Logs)", 1);
-            reserveInfo = Config.Bind("Reserve Data", "Do not Touch", "");
 
             //Setup Data
             ModdedDataSerializer.Setup();
             
             //Load Data from Config
             RelicRegister.LoadConfig();
+            PegTypeRegister.LoadConfig();
 
             //Do Patches
             Harmony patcher = new Harmony(GUID);

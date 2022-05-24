@@ -78,18 +78,23 @@
   <ItemGroup>
     <Compile Include="Interfaces\IModel.cs" />
     <Compile Include="Interfaces\IRegister.cs" />
+    <Compile Include="Model\PegTypeDataModel.cs" />
     <Compile Include="Model\RelicDataModel.cs" />
     <Compile Include="Model\TermDataModel.cs" />
     <Compile Include="Patch\ModdedDataSerializerPatch.cs" />
+    <Compile Include="Patch\PegTypePatches.cs" />
     <Compile Include="Patch\RelicManagerInstancePatch.cs" />
     <Compile Include="Patch\SaveRelicEffectsPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Register\PegTypeRegister.cs" />
+    <Compile Include="Utility\BundleHelper.cs" />
     <Compile Include="Utility\LocalizationHelper.cs" />
     <Compile Include="Register\Register.cs" />
     <Compile Include="Register\RelicRegister.cs" />
     <Compile Include="Test\CriticalKnife.cs" />
     <Compile Include="Utility\ModdedDataSerializer.cs" />
+    <Compile Include="Utility\RegisterExtensionMethods.cs" />
     <Compile Include="Utility\SerializableDictionary.cs" />
   </ItemGroup>
   <ItemGroup>

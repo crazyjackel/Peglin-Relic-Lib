@@ -19,7 +19,7 @@ namespace PeglinRelicLib.Test
             if (!Plugin.enableTestItem.Value) return;
             RelicManager relicManager = (RelicManager)AccessTools.Field(typeof(Attack), "_relicManager").GetValue(__instance);
 
-            if (relicManager.RelicEffectActive(RelicRegister.GetCustomRelicEffect("io.github.crazyjackel.criticalknife")) && critCount > 0)
+            if(RelicRegister.TryGetCustomRelicEffect("io.github.crazyjackel.criticalknife", out RelicEffect effect) && relicManager.RelicEffectActive(effect) && critCount > 0)
             {
                 __result += 2f;
             }

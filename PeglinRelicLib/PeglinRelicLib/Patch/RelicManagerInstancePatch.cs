@@ -23,9 +23,10 @@ namespace PeglinRelicLib.Patch
         {
             if (!Plugin.enableTestItem.Value) return;
 
-            Relic relic = RelicRegister.GetCustomRelic("io.github.crazyjackel.criticalknife");
+            if (!RelicRegister.TryGetCustomRelic("io.github.crazyjackel.criticalknife", out Relic relic)) return;
 
             if (relic == null) return;
+
             ____relicManager.AddRelic(relic);
         }
     }

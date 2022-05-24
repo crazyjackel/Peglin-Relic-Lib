@@ -69,7 +69,7 @@ namespace PeglinRelicLib.Register
 
         protected abstract TEnum CalculateEnum(string GUID);
         protected abstract bool LoadModel(IModel<TEnum> model, out object args);
-        protected abstract void UnloadEnum(TEnum @enum);
+        protected virtual void UnloadEnum(TEnum @enum) { }
         protected virtual void FinalizeModel(IModel<TEnum> model, TEnum @enum, object args) { }
 
 

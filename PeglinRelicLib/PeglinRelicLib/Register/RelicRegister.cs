@@ -55,21 +55,37 @@ namespace PeglinRelicLib.Register
         }
 
         #region Front End
-        public static RelicEffect GetCustomRelicEffect(string GUID)
+        public static bool TryGetCustomRelicEffect(string GUID, out RelicEffect effect)
         {
             if (Instance.TryGetRegisteredValue(GUID, out RelicEffect @enum))
             {
-                return @enum;
+                effect = @enum;
+                return true;
             }
-            return default;
+            effect = default;
+            return false;
         }
-        public static Relic GetCustomRelic(string GUID)
+        public static bool TryGetCustomRelic(string GUID, out Relic relic)
         {
-            return GetCustomRelic(GetCustomRelicEffect(GUID));
+            relic = null;
+
+            if (!TryGetCustomRelicEffect(GUID, out RelicEffect effect)) return false;
+            
+            if (!TryGetCustomRelic(effect, out Relic rel)) return false;
+            
+            relic = rel;
+            return true;
+
         }
-        public static Relic GetCustomRelic(RelicEffect effect)
+        public static bool TryGetCustomRelic(RelicEffect effect, out Relic relic)
         {
-            return Instance.m_customRelics[effect];
+            if(Instance.m_customRelics.TryGetValue(effect, out Relic val))
+            {
+                relic = val;
+                return true;
+            }
+            relic = null;
+            return false;
         }
         [Obsolete("Use Alternative Register Relic")]
         public static RelicEffect RegisterRelic(RelicDataModel relicData)

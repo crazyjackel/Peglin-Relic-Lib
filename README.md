@@ -26,13 +26,13 @@ model.SetAssemblyPath(this);
 ### Register the Model
 Once your Model is created, it is time to register it.
 ```
-RelicEffect effect = RelicRegister.Instance.RegisterRelic(model);
+bool success = RelicRegister.RegisterRelic(model, out RelicEffect myEffect);
 ```
 
 Your RelicEffect is your assigned Relic Enum, there is no guarentee of it being a specific value.
 You can also access your Relic Effect via:
 ```
-RelicEffect effect = RelicRegister.Instance[GUID];
+RelicRegister.TryGetCustomRelicEffect("myGUID", out RelicEffect myEffect);
 ```
 GUIDs are guarenteed to get the same value after registration.
 
@@ -44,11 +44,18 @@ if (relicManager.RelicEffectActive(effect){
 }
 ```
 
+### Other Registers
+
+RelicRegister is one of many Registers to deal with various Enums throughout the game. 
+
+The Following Registers also Help:
+- PegTypeRegister: Register New Peg Types and Add Support for various Pegs
+
 ### Support Localization
 To Add Localization for your Relics, use the built-in LocalizationRegister.
 Your Model will include Name and Description Terms, just fill in the blanks and the rest will be taken care of.
 ```
-LocalizationRegister.ImportTerm(new TermDataModel(model.NameTerm)
+LocalizationHelper.ImportTerm(new TermDataModel(model.NameTerm)
 {
     English = "Critical Knife",
     French = "Dague Pointue"
@@ -74,23 +81,12 @@ Saving Data:
 ModdedDataSerializer.Save("io.github.crazyjackel.eventLifeLost", eventLifeLost);
 ```
 
-### Config Help
-
-Enable Test Item enables a Test Item and gives it to you when you start the game. These Items are used to make sure core systems work in mod.
-
-Debug Log: A Number used to dictate Logging output. Based on a Flag System using LogType for numbers between 0-31.
-We do this by adding the powers of 2 for each option.
-Given the Options are Error = 0, Assert = 1, Warning = 2, Log = 3, and Exceptions = 4, We can calculate out the valid number for getting only Errors, Warnings, and Logs as follows:
-2^Error + 2^Warning + 2^Log = 1 + 4 + 8 = 13
-
 ## Roadmap
 
-- Relic Countdowns. (1.0.6)
-- Bug Squashing. (1.0.6) 
-- Relic Tagging for Compatibility w/ Lookup. (1.0.7)
-- Additional Test Items (1.0.7)
-- Localization from CSV File. (1.0.6)
-- Better Code Commenting (1.0.6)
+- Relic Countdowns. (2.1.0)
+- Bug Squashing. (2.1.0) 
+- Localization from CSV File. (2.1.0)
+- Better Code Commenting (2.1.0)
 
 Links:
 https://github.com/crazyjackel/Peglin-Relic-Lib

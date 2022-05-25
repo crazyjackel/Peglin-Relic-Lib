@@ -19,7 +19,7 @@ namespace PeglinRelicLib.Patch
         {
             if (!PegTypeRegister.IsCustomPegType(type)) return;
 
-            __result = PegTypeRegister.GetPegHit(__instance, type);
+            __result = PegTypeRegister.GetPegCount(__instance, type);
         }
     }
 
@@ -50,6 +50,13 @@ namespace PeglinRelicLib.Patch
                 }
             }
         }
+
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> RemoveWarnings(IEnumerable<CodeInstruction> instructions)
+        {
+            return instructions.MethodReplacer(AccessTools.Method(typeof(Debug), "LogWarning", new Type[] { typeof(object) }), AccessTools.Method(typeof(ConvertToPegTypePatch), "DoNothing"));
+        }
+        public static void DoNothing(object message) { }
         public static void Postfix(Peg __instance, Peg.PegType type)
         {
             MethodInfo method = typeof(PegTypeRegister).GetMethod(nameof(PegTypeRegister.OnConvertToPegType), BindingFlags.Static | BindingFlags.NonPublic);
@@ -63,6 +70,7 @@ namespace PeglinRelicLib.Patch
             {
                 Plugin.Log(BepInEx.Logging.LogLevel.Error, $"PegTypePatches: {e.Message}");
             }
+            __instance.pegType = type;
         }
     }
     [HarmonyPatch]

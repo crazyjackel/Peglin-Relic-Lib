@@ -35,12 +35,24 @@ namespace PeglinRelicLib.Register
             {
                 SupportedPairs.Add(type, new HashSet<PegType>());
             }
+            Peg.OnPegDestroyed += ClearPeg;
+        }
+
+        private void ClearPeg(PegType pegType, Peg peg)
+        {
+            if (PegsOfTypes.TryGetValue(pegType, out List<Peg> myPegs) && myPegs.Contains(peg))
+            {
+                myPegs.Remove(peg);
+            }
         }
 
         #region Front End
         public static void ShufflePegTypes(PegManager pegManager, PegType type)
         {
             if (!Instance.PegsOfTypes.ContainsKey(type)) Instance.PegsOfTypes.Add(type, new List<Peg>());
+
+            var types = Instance.PegsOfTypes[type];
+            types.RemoveAll(x => x == null || x.gameObject == null);
             AccessTools.Method(typeof(PegManager), "ShufflePegs").Invoke(pegManager, new object[] { Instance.PegsOfTypes[type], type });
         }
 
@@ -48,7 +60,7 @@ namespace PeglinRelicLib.Register
         {
             return Instance.GetPegCountActions.Keys.ToList();
         }
-        internal static int GetPegHit(PegManager pegManager, PegType type)
+        internal static int GetPegCount(PegManager pegManager, PegType type)
         {
             if (Instance.GetPegCountActions.TryGetValue(type, out Func<PegManager, int> func))
             {

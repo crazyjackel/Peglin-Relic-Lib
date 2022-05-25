@@ -81,7 +81,7 @@ namespace PeglinRelicLib.Utility
 			}
 			catch (InvalidOperationException ex)
 			{
-				Debug.LogWarning(ex.Message);
+				Plugin.Log(BepInEx.Logging.LogLevel.Warning, ex.Message);
 				string destFileName = filePath + "_bak" + DateTime.Now.ToString("yyyyMMddHHmmss");
 				File.Move(filePath, destFileName);
 			}

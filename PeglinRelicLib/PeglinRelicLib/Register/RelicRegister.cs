@@ -161,7 +161,8 @@ namespace PeglinRelicLib.Register
             {
                 Relic relic = ScriptableObject.CreateInstance<Relic>();
                 relic.locKey = relicData.LocalKey;
-                relic.descMod = relicData.DescriptionKey;
+                relic.descMod = relicData.DescriptionKey ?? "";
+                relic.name = relicData.LocalKey;
 
                 LoadRelicAssets(relic, relicData);
                 AddRelicToPool(new RelicPoolData()

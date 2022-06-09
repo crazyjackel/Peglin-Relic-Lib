@@ -21,6 +21,10 @@ outdir = "./dist"
 source = "./dist"
 target = ""
 
+[[build.copy]]
+source = "Include"
+target = ""
+
 [publish]
 repository = "https://thunderstore.io"
 communities = ["peglin"]

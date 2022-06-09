@@ -21,7 +21,7 @@ jobs:
       - run: dotnet nuget add source https://nuget.bepinex.dev/v3/index.json --name BepInEx
       - run: nuget restore $SOLUTION_NAME.sln
       - run: dotnet build -c Release .
-      - run: mkdir dist && cp bin/Release/net46/$MOD_NAME.dll dist/
+      - run: mkdir dist && cp bin/Release/$MOD_NAME.dll dist/
       - name: Build thunderstore package
         run: tcli build
       - uses: actions/upload-artifact@v3

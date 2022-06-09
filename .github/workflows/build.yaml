@@ -54,7 +54,7 @@ jobs:
       - uses: mavrosxristoforos/get-xml-info@1.0
         id: csproj
         with:
-          xml-file: ${{ env.MOD_NAME}}.csproj
+          xml-file: ${{ env.SOLUTION_NAME}}.csproj
           xpath: //Project/PropertyGroup/Version
       - name: Get thunderstore.toml version
         run: |

@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Build
 
 on: 
@@ -21,7 +22,7 @@ jobs:
       - run: dotnet nuget add source https://nuget.bepinex.dev/v3/index.json --name BepInEx
       - run: nuget restore $SOLUTION_NAME.sln
       - run: dotnet build -c Release .
-      - run: mkdir dist && cp PeglinRelicLib\bin\Release\PeglinRelicLib.dll dist/
+      - run: mkdir dist && cp PeglinRelicLib\bin\Release\PeglinRelicLib.dll dist/ && cp Include dist/
       - name: Build thunderstore package
         run: tcli build
       - uses: actions/upload-artifact@v3

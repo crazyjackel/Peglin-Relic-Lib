@@ -58,7 +58,7 @@ jobs:
       - run: |
           echo "Validating versions (tag: ${{ steps.tag.outputs.tag }}, toml: ${{ env.toml_version }})"
       - name: Validate versions
-        if: steps.tag.outputs.tag != env.toml_version
+        if: ${{ steps.tag.outputs.tag != env.toml_version }}
         uses: actions/github-script@v3
         with:
           script: core.setFailed('Release version mismatch!')

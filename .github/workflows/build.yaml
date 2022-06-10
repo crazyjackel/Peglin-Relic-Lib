@@ -51,19 +51,14 @@ jobs:
         id: tag
         with:
           strip_v: true
-      - uses: mavrosxristoforos/get-xml-info@1.0
-        id: csproj
-        with:
-          xml-file: ${{ env.SOLUTION_NAME}}.csproj
-          xpath: //Project/PropertyGroup/Version
       - name: Get thunderstore.toml version
         run: |
           version=$(grep "versionNumber" thunderstore.toml | cut -d" " -f3 | tr -d '"')
           echo "toml_version=$version" >> $GITHUB_ENV
       - run: |
-          echo "Validating versions (tag: ${{ steps.tag.outputs.tag }}, csproj: ${{ steps.csproj.outputs.info }}, toml: ${{ env.toml_version }})"
+          echo "Validating versions (tag: ${{ steps.tag.outputs.tag }}, toml: ${{ env.toml_version }})"
       - name: Validate versions
-        if: steps.tag.outputs.tag != steps.csproj.outputs.info || steps.tag.outputs.tag != env.toml_version
+        if: steps.tag.outputs.tag != env.toml_version
         uses: actions/github-script@v3
         with:
           script: core.setFailed('Release version mismatch!')

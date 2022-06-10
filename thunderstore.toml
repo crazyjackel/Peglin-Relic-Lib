@@ -3,7 +3,7 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "Gobs"
-name = "Peglin Relic Library"
+name = "Peglin_Relic_Library"
 versionNumber = "2.0.1"
 description = "A Library for creating Relics in Peglin"
 websiteUrl = "https://github.com/crazyjackel/Peglin-Relic-Lib"

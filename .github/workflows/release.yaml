@@ -6,7 +6,7 @@ on:
     
 env:
   THUNDERSTORE_NAMESPACE: Gobs
-  MOD_NAME: Peglin.Relic.Library
+  MOD_NAME: Peglin_Relic_Library
     
 jobs:
   release:

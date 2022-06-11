@@ -14,6 +14,8 @@ using PeglinRelicLib.Register;
 using BepInEx.Configuration;
 using PeglinRelicLib.Utility;
 using BepInEx.Logging;
+using System.Reflection;
+using PeglinRelicLib;
 
 namespace PeglinRelicLib
 {

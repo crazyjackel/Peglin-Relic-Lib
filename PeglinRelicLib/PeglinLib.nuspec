@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Peglin.PeglinRelicLib</id>
+    <version>2.0.1-r.0</version>
+    <title>PeglinRelicLib</title>
+    <authors>crazyjackel</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/crazyjackel/Peglin-Relic-Lib</projectUrl>
+    <description>Nuget Package for Peglin Relic Lib</description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2">
+        <dependency id="Peglin.GameLibs" version="0.7.23-r.0"/>
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin/Release/PeglinRelicLib.dll" target="lib/net472" />
+  </files>
+</package>

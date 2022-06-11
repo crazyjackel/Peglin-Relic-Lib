@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using PeglinRelicLib;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -6,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PeglinRelicLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Files for Interfacing with Peglin Relic Library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PeglinRelicLib")]
@@ -22,6 +23,7 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("56df352f-00e7-4bdb-be75-18f52ce2f0ca")]
 
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
@@ -32,5 +34,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion(Plugin.Version)]
 [assembly: AssemblyFileVersion("1.0.0.0")]

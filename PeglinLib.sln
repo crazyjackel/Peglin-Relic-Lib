@@ -5,6 +5,13 @@ VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeglinLib", "PeglinRelicLib\PeglinLib.csproj", "{56DF352F-00E7-4BDB-BE75-18F52CE2F0CA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0137439F-92E1-4216-95D6-EE86BE3E6BCF}"
+	ProjectSection(SolutionItems) = preProject
+		icon.png = icon.png
+		README.md = README.md
+		thunderstore.toml = thunderstore.toml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

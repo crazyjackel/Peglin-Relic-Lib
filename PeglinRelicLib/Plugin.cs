@@ -24,7 +24,7 @@ namespace PeglinRelicLib
     {
         public const string GUID = "io.github.crazyjackel.RelicLib";
         public const string Name = "Relic Lib";
-        public const string Version = "2.0.1";
+        public const string Version = "2.0.2";
 
         static string m_path;
         static Plugin m_plugin;

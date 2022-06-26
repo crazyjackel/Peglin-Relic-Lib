@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "Gobs"
 name = "Peglin_Relic_Library"
-versionNumber = "2.0.1"
+versionNumber = "2.0.2"
 description = "A Library for creating Relics in Peglin"
 websiteUrl = "https://github.com/crazyjackel/Peglin-Relic-Lib"
 containsNsfwContent = false

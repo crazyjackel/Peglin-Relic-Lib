@@ -34,6 +34,7 @@ namespace PeglinRelicLib.Utility
             {
                 LocalizationManager.Sources[0].Import_CSV(category, builder.ToString(), eSpreadsheetUpdateMode.AddNewTerms, ',');
             }
+            LocalizationManager.LocalizeAll();
         }
     }
 }
